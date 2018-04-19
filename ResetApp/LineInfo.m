@@ -13,6 +13,7 @@
 {
     if (self = [super init]) {
         self.path = [UIBezierPath new];
+        self.drawColor = [UIColor blackColor];
     }
     return self;
 }

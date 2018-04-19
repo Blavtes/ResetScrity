@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSMutableArray *lineArray;
 
 @property (nonatomic, strong) PointView *movePoint;
-
+@property (nonatomic, strong) UILabel *label ;
 @end
 static float kWidth = 20;
 @implementation ViewController
@@ -24,7 +24,14 @@ static float kWidth = 20;
     [super viewDidLoad];
     _poingtArray = [NSMutableArray arrayWithCapacity:1];
     _lineArray = [NSMutableArray arrayWithCapacity:1];
+    _label = [UILabel new];
+    _label.frame = CGRectMake(0, 0, 40, 20);
+    _label.adjustsFontSizeToFitWidth = YES;
+    _label.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 30);
+
+    [self.view.layer addSublayer:_label.layer];
     [self initPointArrLevel:6];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -39,7 +46,7 @@ static float kWidth = 20;
 
 - (void)initPointArrLevel:(int)level
 {
-    int pointCount = 6 + level;
+    int pointCount = 6 + (level > 0 ? level : 0);
     int lineCount = pointCount + level + 1;
     for (int i = 0; i < pointCount; i++) {
         PointView *pointView = [PointView new];
@@ -69,7 +76,7 @@ static float kWidth = 20;
         [_lineArray addObject:line];
     }
     
-    for (NSInteger i = (lineCount - _poingtArray.count - 1); i < lineCount; i++) {
+    for (NSInteger i = (lineCount - _poingtArray.count); i < lineCount; i++) {
         int index1 = rand() % _poingtArray.count;
         int index2 = rand() % _poingtArray.count;
         if (index1 == index2) {
@@ -241,6 +248,7 @@ static float kWidth = 20;
 //改变相交线的颜色
 - (void)checkoutLineColor
 {
+    NSInteger count = _lineArray.count;
     for (int i = 0; i < _lineArray.count; i++) {
         LineInfo *start = _lineArray[i];
         BOOL judge = NO;
@@ -256,12 +264,17 @@ static float kWidth = 20;
             }
         }
         if (judge) {
+            
             start.lineLayer.strokeColor = [UIColor blackColor].CGColor;
+            count += 1;
             NSLog(@"flog %d",start.startView.flag);
         } else {
+            count -= 1;
             start.lineLayer.strokeColor = [UIColor greenColor].CGColor;
         }
     }
+//    NSLog(@"count %ld",(long)count);
+    _label.text = [NSString stringWithFormat:@"%d/%d",count / 2,_lineArray.count];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

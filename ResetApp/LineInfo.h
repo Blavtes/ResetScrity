@@ -13,7 +13,7 @@
 @property (nonatomic, strong) PointView *startView;
 @property (nonatomic, strong) PointView *endView;
 @property (nonatomic, strong) UIBezierPath *path;
-
+@property (nonatomic, strong) UIColor  *drawColor;
 @property (nonatomic, strong) CAShapeLayer   *lineLayer;
 - (BOOL)isEqual:(LineInfo *)object;
 @end
